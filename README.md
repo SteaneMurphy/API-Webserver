@@ -1,6 +1,6 @@
 # JAMES MURPHY API PROJECT
 
-## ${\textsf{\color{blue}PROJECT REPOSITORY - JAMESMURPHY T2A2}}$
+## ${\textsf{\color{goldenrod}PROJECT REPOSITORY - JAMESMURPHY T2A2}}$
 
 [Link To GitHub Repository](https://github.com/SteaneMurphy/JamesMurphy_T1A2)
 
@@ -8,40 +8,45 @@ Clone (HTTPS): https://github.com/SteaneMurphy/JamesMurphy_T1A2
 
 ![image](/docs/ProfileImage.jpg)
 
-## ${\textsf{\color{blue}PROJECT DESCRIPTION}}$
+## ${\textsf{\color{goldenrod}PROJECT DESCRIPTION}}$
 
 This project is a working API Flask web-service using a PostgreSQL backend. It has been designed using MVC and RESTful API architecture with a 3NF (3rd Normal Form) database schema.
 
-## ${\textsf{\color{blue}WHAT IS THIS API?}}$
+## ${\textsf{\color{goldenrod}WHAT IS THIS API?}}$
 
 This API provides data to any front-end application or service in the form of JSON objects. The 
 
-## ${\textsf{\color{blue}PROJECT TRACKING}}$
+## ${\textsf{\color{goldenrod}PROJECT TRACKING}}$
 
 All completed and outstanding tasks for this project can be found on its associated [Github Projects board](https://github.com/users/SteaneMurphy/projects/2/views/1).
 
-## ${\textsf{\color{blue}PACKAGES AND DEPENDENCIES}}$
+## ${\textsf{\color{goldenrod}PACKAGES AND DEPENDENCIES}}$
 
-## ${\textsf{\color{blue}RELATIONAL DATABASE SYSTEMS}}$
+## ${\textsf{\color{goldenrod}RELATIONAL DATABASE SYSTEMS}}$
 
-## ${\textsf{\color{blue}ORM (OBJECT RELATIONAL MAPPER)}}$
+## ${\textsf{\color{goldenrod}ORM (OBJECT RELATIONAL MAPPER)}}$
 
-## ${\textsf{\color{blue}ERD (ENTITY RELATIONSHIP DIAGRAM)}}$
+## ${\textsf{\color{goldenrod}ERD (ENTITY RELATIONSHIP DIAGRAM)}}$
 
-## ${\textsf{\color{blue}ENTITY MODELS AND RELATIONSHIPS}}$
+## ${\textsf{\color{goldenrod}ENTITY MODELS AND RELATIONSHIPS}}$
 
-## ${\textsf{\color{blue}API ENDPOINTS}}$
+## ${\textsf{\color{goldenrod}API ENDPOINTS}}$
 
-### ${\textsf{\color{blue}USERS}}$
+### ${\textsf{\color{magenta}USERS}}$
 
-#### ${\textsf{\color{pink}REGISTER A NEW USER ACCOUNT}}$
-- URI: ```/register```
+#### ${\textsf{\color{red}REGISTER A NEW USER ACCOUNT}}$
+*Create a new user account in the database with the submitted details*
+
+- URI: ```/users/register```
 - HTTPS: ```POST```
+- HEADER: Not Applicable
+- AUTHORISATION: None
 - BODY:
 ```json
 {
     "first_name": "string",
     "last_name": "string",
+    "phone": "string",
     "email": "string",
     "password": "string",
 }
@@ -62,10 +67,15 @@ All completed and outstanding tasks for this project can be found on its associa
     "response": "User registration failed"
 }
 ```
+<br>
 
-#### *USER ACCOUNT LOGIN*
-- URI: ```/login```
+#### ${\textsf{\color{red}USER ACCOUNT LOGIN}}$
+*Log user into system with supplied credentials. Returns a bearer JWT token*
+
+- URI: ```/users/login```
 - HTTPS: ```POST```
+- HEADER: Not Applicable
+- AUTHORISATION: ${\textsf{\color{red}User Acccount Credentials}}$
 - BODY:
 ```json
 {
@@ -78,7 +88,9 @@ All completed and outstanding tasks for this project can be found on its associa
 
 ```json
 {
-    "response": "User login successful" 
+    //example token provided
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.             eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    "repsonse": "User login successful",
 }
 ```
 - FAILED RESPONSE:
@@ -89,12 +101,193 @@ All completed and outstanding tasks for this project can be found on its associa
     "response": "User login failed"
 }
 ```
-- Account Deletion
-- Update User Details
-- Get User Details By ID
-- Get All Users
+<br>
 
-### SUBSCRIPTIONS
+#### ${\textsf{\color{red}ACCOUNT DELETION}}$
+*Admin may delete a specific user account via an user ID*
+
+- URI: ```/users/delete/<int:id>```
+- HTTPS: ```GET```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}Admin}}$
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+{
+    "response": "User <int:id> deleted successfully" 
+}
+```
+- FAILED RESPONSE:
+    - ```401 Unauthorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Unauthorised Access"
+}
+```
+```json
+{
+    "response": "User Does Not Exist"
+}
+```
+<br>
+
+#### ${\textsf{\color{red}UPDATE USER DETAILS}}$
+*User may update account details using submitted details and user ID*
+
+- URI: ```/users/update/<int:id>```
+- HTTPS: ```POST```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}User}}$
+- BODY:
+```json
+{
+    "first_name": "string",
+    "last_name": "string",
+    "phone": "string",
+    "email": "string",
+    "password": "string",
+}
+```
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+{
+    "response": "User Details Updated Successfully" 
+}
+```
+- FAILED RESPONSE:
+    - ```401 Unauthorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Not Authorised"
+}
+```
+```json
+{
+    "response": "Not Found"
+}
+```
+<br>
+
+#### ${\textsf{\color{red}ACCOUNT DELETION}}$
+*Admin may delete a specific user account via an user ID*
+
+- URI: ```/users/delete/<int:id>```
+- HTTPS: ```GET```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}Admin}}$
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+{
+    "response": "User <int:id> deleted successfully" 
+}
+```
+- FAILED RESPONSE:
+    - ```401 Unauthorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Unauthorised Access"
+}
+```
+```json
+{
+    "response": "User Does Not Exist"
+}
+```
+<br>
+
+#### ${\textsf{\color{red}GET USER DETAILS BY ID}}$
+*Returns user details by submitted ID*
+
+- URI: ```/users/<int:id>```
+- HTTPS: ```GET```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}User}}$
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+{
+    "first_name": "string",
+    "last_name": "string",
+    "phone": "string",
+    "email": "string",
+}
+```
+- FAILED RESPONSE:
+    - ```401 Not Authorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Not Authorised"
+}
+```
+```json
+{
+    "response": "Not Found"
+}
+```
+<br>
+
+#### ${\textsf{\color{red}GET ALL USERS DETAILS}}$
+*Returns user details by submitted ID*
+
+- URI: ```/users```
+- HTTPS: ```GET```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}Admin}}$
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+[
+    {
+        //user 1
+        "user_ID": "integer",
+        "first_name": "string",
+        "last_name": "string",
+        "phone": "string",
+        "email": "string",
+    },
+    {
+        //user 2
+        "user_ID": "integer",
+        "first_name": "string",
+        "last_name": "string",
+        "phone": "string",
+        "email": "string",
+    },
+    ///etc for all users in database
+]
+```
+- FAILED RESPONSE:
+    - ```401 Not Authorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Not Authorised"
+}
+```
+```json
+{
+    "response": "Not Found"
+}
+```
+<br>
+
+### ${\textsf{\color{magenta}SUBSCRIPTIONS}}$
 
 - Create Subscription (Admin Only)
 - Update Subscription (Admin Only)
@@ -102,7 +295,7 @@ All completed and outstanding tasks for this project can be found on its associa
 - Delete Subscription (Admin Only)
 - Get All Subscriptions
 
-### INVOICES
+### ${\textsf{\color{magenta}INVOICES}}$
 
 - Create Invoice (Billing Only)
 - Get Invoice By ID
@@ -110,7 +303,7 @@ All completed and outstanding tasks for this project can be found on its associa
 - Delete Invoice (Billing Only)
 - Get All Invoices
 
-### PRODUCTS
+### ${\textsf{\color{magenta}PRODUCTS}}$
 
 - Create Product (Admin Only)
 - Delete Product (Admin Only)
@@ -118,13 +311,13 @@ All completed and outstanding tasks for this project can be found on its associa
 - Get Product Details By ID
 - Get All Products
 
-### LICENCES
+### ${\textsf{\color{magenta}LICENCES}}$
 
 - Create Product Licence
 - Check Product Licence
 - Delete Product Licence By ID
 
-### PURCHASE HISTORY
+### ${\textsf{\color{magenta}PURCHASE HISTORY}}$
 
 - Create New Purchase History
 - Get User Purchase History By ID
