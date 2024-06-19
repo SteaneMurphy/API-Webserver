@@ -104,6 +104,8 @@ Ensuring that you are within the newly created virtual environment, you can safe
 
 ## ${\textsf{\color{goldenrod}ERD (ENTITY RELATIONSHIP DIAGRAM)}}$
 
+![image](/docs/ERD.png)
+
 ## ${\textsf{\color{goldenrod}ENTITY MODELS AND RELATIONSHIPS}}$
 
 ## ${\textsf{\color{goldenrod}API ENDPOINTS}}$
@@ -183,7 +185,7 @@ Ensuring that you are within the newly created virtual environment, you can safe
 *User may update account details using submitted details and user ID*
 
 - URI: ```/users/update/<int:id>```
-- HTTPS: ```POST```
+- HTTPS: ```PUT```
 - HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
 - AUTHORISATION: ${\textsf{\color{red}User}}$
 - BODY:
@@ -387,32 +389,10 @@ Ensuring that you are within the newly created virtual environment, you can safe
 - Delete Subscription (Admin Only)
 - Get All Subscriptions
 
-### ${\textsf{\color{magenta}INVOICES}}$
-
-- Create Invoice (Billing Only)
-- Get Invoice By ID
-- Update Invoice (Billing Only)
-- Delete Invoice (Billing Only)
-- Get All Invoices
+### ${\textsf{\color{magenta}PAYMENTS}}$
 
 ### ${\textsf{\color{magenta}PRODUCTS}}$
 
-- Create Product (Admin Only)
-- Delete Product (Admin Only)
-- Update Product Details (Admin Only)
-- Get Product Details By ID
-- Get All Products
+### ${\textsf{\color{magenta}PLANS}}$
 
-### ${\textsf{\color{magenta}LICENCES}}$
-
-- Create Product Licence
-- Check Product Licence
-- Delete Product Licence By ID
-
-### ${\textsf{\color{magenta}PURCHASE HISTORY}}$
-
-- Create New Purchase History
-- Get User Purchase History By ID
-- Update User Purchase History
-- Delete User Purchase History
-- Get All Purchase History
+### ${\textsf{\color{magenta}TICKETS}}$
