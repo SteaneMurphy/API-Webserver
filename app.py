@@ -25,3 +25,7 @@ db.init_app(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+from blueprints.cli_bp import db_commands
+app.register_blueprint(db_commands)
+
