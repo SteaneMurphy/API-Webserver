@@ -84,7 +84,19 @@ The Python Virtual Environment package will allow a user to modify their project
 
 ### RUN VIRTUAL ENVIRONMENT
 
-Once the virtual environment package has been installed, we need to create a new virtual environment. We will create a 
+Once the virtual environment package has been installed, we need to create a new virtual environment. To create a new virtual environment, please use the following command:
+
+```python3 -m venv .venv```
+
+This new environment must be activated:
+
+```source .venv/bin/activate```
+
+### INSTALL DEPENDENCIES
+
+Ensuring that you are within the newly created virtual environment, you can safely install the dependencies listed in the "requirements.txt". To iterate over the list and install each package, please use the following terminal command:
+
+```pip install -r requirements.txt```
 
 ## ${\textsf{\color{goldenrod}RELATIONAL DATABASE SYSTEMS}}$
 
