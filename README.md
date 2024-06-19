@@ -14,13 +14,77 @@ This project is a working API Flask web-service using a PostgreSQL backend. It h
 
 ## ${\textsf{\color{goldenrod}WHAT IS THIS API?}}$
 
-This API provides data to any front-end application or service in the form of JSON objects. The 
+This API provides data to any front-end application or service in the form of JSON objects. The service is a mock-up SaaS system whereby users can register and login to the system, purchase products through subscriptions and the system invoices the customer for said purchase. Each product comes with attatched licensing. 
+
+This API helps an online business manage customers and the products and services they purchase as well as allowing the business to update or change a product/service at will. The product/service can be offered through a subscription by having the system automate billing and payments.
+
+This solution reduces the amount of contact hours an employee of the business needs to spend organising customer data, preparing invoices and checking subscription and payment statuses by providing the data to automate the procedure.
 
 ## ${\textsf{\color{goldenrod}PROJECT TRACKING}}$
 
 All completed and outstanding tasks for this project can be found on its associated [Github Projects board](https://github.com/users/SteaneMurphy/projects/2/views/1).
 
+The project is split into 7 parent tasks, comprised of smaller individual tasks:
+
+- Database Design
+- Documentation: Endpoints
+- Documentation
+- Blueprints
+- Main Application/Initialisation
+- Models
+- Authorisation
+
+![image](/docs/GitHubProjectDatabaseDesign.PNG)
+
+These tasks are tracked across four stages of completion:
+
+- **Backlog:** parent task and associated child tasks have not been started
+
+![image](/docs/GitHubProjectBacklog.PNG)
+
+- **In Progress:** parent task has been started and one or multiple child tasks have been completed
+
+![image](/docs/GitHubProjectInProgress.PNG)
+
+- **Testing:** a parent task and all of its associated child tasks have been completed.The implemented features from this task are now awaiting testing. Further testing tasks may be added to re-test existing working features to ensure they do not break upon new features being added
+
+![image](/docs/GitHubProjectTesting.PNG)
+
+- **Done:** a parent task and its assicated feature is now tested and considered complete
+
+![image](/docs/GitHubProjectDone.PNG)
+
 ## ${\textsf{\color{goldenrod}PACKAGES AND DEPENDENCIES}}$
+
+This application uses the following dependencies:
+
+- Flask
+- SQLAlchemy
+- SQLAlchemy ORM
+- Marshmallow
+- BCrypt
+- JWT Extended
+- PostgreSQL
+
+These are only major dependencies, it is recommended that a user installs the full list of dependencies from the "requirements.txt" file included in this repository.
+
+The following are installation instructions to get his application working in your environment.
+
+### CLONE THE REPOSITORY
+
+To clone the repository, please make a directory for the project. This can be done by making a new folder in Windows or by typing the following into a terminal:
+
+```mkdir <directory_path>```
+
+### INSTALL VIRTUAL ENVIRONMENT
+
+The Python Virtual Environment package will allow a user to modify their project environment without affecting the overall system. To install this package, please enter the following command into the terminal:
+
+```pip install venv```
+
+### RUN VIRTUAL ENVIRONMENT
+
+Once the virtual environment package has been installed, we need to create a new virtual environment. We will create a 
 
 ## ${\textsf{\color{goldenrod}RELATIONAL DATABASE SYSTEMS}}$
 
@@ -89,7 +153,7 @@ All completed and outstanding tasks for this project can be found on its associa
 ```json
 {
     //example token provided
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.             eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
     "repsonse": "User login successful",
 }
 ```
@@ -99,37 +163,6 @@ All completed and outstanding tasks for this project can be found on its associa
 ```json
 {
     "response": "User login failed"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}ACCOUNT DELETION}}$
-*Admin may delete a specific user account via an user ID*
-
-- URI: ```/users/delete/<int:id>```
-- HTTPS: ```GET```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}Admin}}$
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-{
-    "response": "User <int:id> deleted successfully" 
-}
-```
-- FAILED RESPONSE:
-    - ```401 Unauthorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Unauthorised Access"
-}
-```
-```json
-{
-    "response": "User Does Not Exist"
 }
 ```
 <br>
@@ -288,6 +321,53 @@ All completed and outstanding tasks for this project can be found on its associa
 <br>
 
 ### ${\textsf{\color{magenta}SUBSCRIPTIONS}}$
+
+#### ${\textsf{\color{red}CREATE SUBSCRIPTION}}$
+*Create a new subscription type*
+
+- URI: ```/subscriptions```
+- HTTPS: ```POST```
+- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
+- AUTHORISATION: ${\textsf{\color{red}Admin}}$
+- SUCCESSFUL RESPONSE: 
+    - ```200 OK```
+
+```json
+[
+    {
+        //user 1
+        "subscription_ID": "integer",
+        "first_name": "string",
+        "last_name": "string",
+        "phone": "string",
+        "email": "string",
+    },
+    {
+        //user 2
+        "user_ID": "integer",
+        "first_name": "string",
+        "last_name": "string",
+        "phone": "string",
+        "email": "string",
+    },
+    ///etc for all users in database
+]
+```
+- FAILED RESPONSE:
+    - ```401 Not Authorised```
+    - ```404 Not Found```
+
+```json
+{
+    "response": "Not Authorised"
+}
+```
+```json
+{
+    "response": "Not Found"
+}
+```
+<br>
 
 - Create Subscription (Admin Only)
 - Update Subscription (Admin Only)
