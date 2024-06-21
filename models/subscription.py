@@ -1,18 +1,28 @@
 from datetime import date
 from app import db, ma
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Boolean, ForeignKey
+from marshmallow import fields
 
 class Subscription(db.Model):
     __tablename__ = "subscriptions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     start_date: Mapped[date]
-    end_date: Mapped[date]
-    status: Mapped[bool] = mapped_column(Boolean(), server_default="false")
+    end_date: Mapped[date]                                                          #how to determine end date?
+    status: Mapped[bool] = mapped_column(Boolean(), server_default="false")         #active (true) or disabled (false)       
+
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    #plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"))
+    user: Mapped["User"] = relationship(back_populates="subscriptions")
+
+    plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"))
+    plan: Mapped["Plan"] = relationship(back_populates="subscriptions")
+
+    payment: Mapped["Payment"] = relationship(back_populates='subscription')
 
 class SubscriptionSchema(ma.Schema):
+    user = fields.Nested("UserSchema")
+    plan = fields.Nested("PlanSchema")
+
     class Meta:
-        fields = ("id", "start_date", "end_date", "status", "last", "last_login")
+        fields = ("id", "start_date", "end_date", "status", "user", "plan")
