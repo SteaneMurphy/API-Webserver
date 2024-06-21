@@ -1,0 +1,27 @@
+[
+    {
+      "product_name": "Project Management Tool",
+      "description": "A tool designed to help teams plan, track, and manage their projects efficiently with features like task assignment, Gantt charts, and collaboration tools."
+    },
+    {
+      "product_name": "Customer Relationship Management (CRM)",
+      "description": "A platform that helps businesses manage their interactions with current and potential customers, offering tools for sales tracking, contact management, and communication."
+    },
+    {
+      "product_name": "Accounting Software",
+      "description": "A software solution for managing a company's financial transactions, including accounts payable, accounts receivable, payroll, and financial reporting."
+    },
+    {
+      "product_name": "Email Marketing Platform",
+      "description": "A service designed to help businesses create, send, and track email marketing campaigns, with features for segmentation, automation, and analytics."
+    },
+    {
+      "product_name": "Human Resources Management System (HRMS)",
+      "description": "A comprehensive system for managing employee data, payroll, recruitment, benefits, and performance evaluations within an organization."
+    },
+    {
+      "product_name": "Customer Support Helpdesk",
+      "description": "A solution that provides customer support teams with tools to manage incoming support requests, track issues, and communicate with customers efficiently."
+    }
+  ]
+  

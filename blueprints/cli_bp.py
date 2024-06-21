@@ -8,7 +8,7 @@ from models.plan import Plan
 from models.product import Product
 from models.plan_product import PlanProduct
 from app import db
-import json
+import json, random
 
 db_commands = Blueprint('db', __name__)
 
@@ -49,116 +49,156 @@ def database_create():
     db.session.add_all(plans)
     db.session.commit()
 
+    #seed all user details from dummy_users.json file
     users = []
-
     with open("seed_data/dummy_users.json") as f:
         data = json.load(f)
         for i in data:
-            newUser = User()
-            newUser.first_name = i['first_name']
-            newUser.last_name = i['last_name']
-            newUser.email = i['email']
-            newUser.date_created=date.today()
-            newUser.last_login=date.today()
-            users.append(newUser)
+            users.append(
+                User(
+            first_name = i['first_name'],
+            last_name = i['last_name'],
+            email = i['email'],
+            date_created=date.today(),
+            last_login=date.today(),
+            ))
 
     db.session.add_all(users)
     db.session.commit()
 
-    subscriptions = [
-        Subscription(
-            start_date=date.today(),
-            end_date=date.today(),
-            status=True,
-            user=users[0],
-            plan=plans[0],
-        ),
-    ]
+    #for each user in users[], generate a random subscription (random amount of plans, random active/disabled, assigned to user)
+    subscriptions = []
+    for index, val in enumerate(users):
+        for j in range(random.randint(1, 4)):
+            subscriptions.append(
+            Subscription(
+                start_date=date.today(),
+                end_date=date.today(),
+                status=random.choice([True, False]),
+                user=users[index],
+                plan=plans[random.randint(0, 3)],
+            ))
 
     db.session.add_all(subscriptions)
     db.session.commit()
 
-    payments = [
-        Payment(
-            amount=39.99,
-            payment_date=date.today(),
-            payment_type="mastercard",
-            subscription=subscriptions[0],
-        ),
-        Payment(
-            amount=39.99,
-            payment_date=date.today(),
-            payment_type="mastercard",
-            subscription=subscriptions[0],
-        ),
-        Payment(
-            amount=39.99,
-            payment_date=date.today(),
-            payment_type="mastercard",
-            subscription=subscriptions[0],
-        ),
-    ]
-
-    db.session.add_all(payments)
+    #for each entry in subscriptions[], create a payment with the correct price depending that associated subscriptions plan
+    payments = []   
+    for index, val in enumerate(subscriptions):
+        price = val.plan.price
+        payments.append(
+            Payment(            
+                amount=price,
+                payment_date=date.today(),
+                payment_type=random.choice(["mastercard", "visa", "amex", "paypal", "eft"]),
+                subscription=subscriptions[index],
+            ))
+        db.session.add(payments[index])  #wtf? db.session.add_all() causes session to fail?
     db.session.commit()
 
-    tickets = [
-        Ticket(
-            issue_description="random issue description",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-        Ticket(
-            issue_description="random issue description 2",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-        Ticket(
-            issue_description="random issue description 3",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-        Ticket(
-            issue_description="random issue description 4",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-        Ticket(
-            issue_description="random issue description 5",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-        Ticket(
-            issue_description="random issue description 6",
-            date_created=date.today(),
-            status="in progress",
-            user=users[0],
-        ),
-    ]
+    #for each user in users[], generate a random amount of support tickets between 0 and 3
+    tickets = []
+    for index, val in enumerate(users):
+        with open("seed_data/dummy_tickets.json") as f:
+            data = json.load(f)          
+            for j in range(random.randint(1, 4)):
+                tickets.append(Ticket(
+                    issue_description = random.choice(data)['description'],
+                    date_created=date.today(),
+                    status=random.choice(["in progress", "closed"]),
+                    user=users[index],
+                ))
 
     db.session.add_all(tickets)
     db.session.commit()
 
-    products = [
-        Product(
-            product_name="software product #1",
-            description="description of product #1",
-            license="generate a JWT token later",
-        ),
-    ]
+    #loads all products available from dummy_products.json and populates associated database entity
+    products = []
+    with open("seed_data/dummy_products.json") as f:
+        data = json.load(f)
+        for i in data:
+            products.append(Product(
+                product_name = i['product_name'],
+                description = i['description'],
+                license = "generate JWT token",
+            ))
 
     db.session.add_all(products)
     db.session.commit()
 
+    #associates each plan with a set of products, 4 dummy plans have been associated with the correct amount of products as per their dummy description
     plan_products = [
+        #free plan
         PlanProduct(
             plan=plans[0],
             product=products[0]
+        ),
+        PlanProduct(
+            plan=plans[0],
+            product=products[1]
+        ),
+        #basic plan
+        PlanProduct(
+            plan=plans[1],
+            product=products[0]
+        ),
+        PlanProduct(
+            plan=plans[1],
+            product=products[1]
+        ),
+        PlanProduct(
+            plan=plans[1],
+            product=products[2]
+        ),
+        PlanProduct(
+            plan=plans[1],
+            product=products[3]
+        ),
+        #advanced plan
+        PlanProduct(
+            plan=plans[2],
+            product=products[0]
+        ),
+        PlanProduct(
+            plan=plans[2],
+            product=products[1]
+        ),
+        PlanProduct(
+            plan=plans[2],
+            product=products[2]
+        ),
+        PlanProduct(
+            plan=plans[2],
+            product=products[3]
+        ),
+        PlanProduct(
+            plan=plans[2],
+            product=products[4]
+        ),
+        #pro plan
+        PlanProduct(
+            plan=plans[3],
+            product=products[0]
+        ),
+        PlanProduct(
+            plan=plans[3],
+            product=products[1]
+        ),
+        PlanProduct(
+            plan=plans[3],
+            product=products[2]
+        ),
+        PlanProduct(
+            plan=plans[3],
+            product=products[3]
+        ),
+        PlanProduct(
+            plan=plans[3],
+            product=products[4]
+        ),
+        PlanProduct(
+            plan=plans[3],
+            product=products[5]
         ),
     ]
 

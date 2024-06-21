@@ -1,0 +1,63 @@
+[
+    {
+      "description": "I am unable to access my account despite entering the correct credentials. Please assist in resetting my password."
+    },
+    {
+      "description": "I have been charged twice for my subscription this month. Can you please look into this and process a refund?"
+    },
+    {
+      "description": "I would like to request a new feature that allows users to export data in CSV format directly from the dashboard."
+    },
+    {
+      "description": "The reporting module is not displaying the correct data for the current month. Please investigate this issue."
+    },
+    {
+      "description": "Our team is unable to access the API endpoints. We are receiving a 403 Forbidden error. Please advise."
+    },
+    {
+      "description": "We need to update the user permissions for our team. Some users are unable to access the admin panel."
+    },
+    {
+      "description": "There seems to be an issue with data synchronization between our CRM and your platform. The records are not updating correctly."
+    },
+    {
+      "description": "One of our users is experiencing difficulties logging in. The system keeps showing an invalid login attempt message."
+    },
+    {
+      "description": "The application has been running very slow over the past week. It takes a long time to load pages and execute actions."
+    },
+    {
+      "description": "We are trying to integrate your platform with a third-party app but are encountering connection errors. Please help."
+    },
+    {
+      "description": "We would like to downgrade our subscription from Premium to Basic. Please guide us through the process."
+    },
+    {
+      "description": "Notification emails are not being sent to our users. This issue started happening after the recent update."
+    },
+    {
+      "description": "I encountered an error while trying to generate an invoice. The system crashes and shows a 500 Internal Server Error."
+    },
+    {
+      "description": "Can you assist with changing the primary email address associated with our account? The current one is outdated."
+    },
+    {
+      "description": "Our team is unable to upload files to the document library. We receive an error message saying the file format is not supported."
+    },
+    {
+      "description": "The dashboard analytics are not updating in real-time. We need accurate data for our weekly reports."
+    },
+    {
+      "description": "Is it possible to customize the user interface to match our company's branding? We need to change the color scheme."
+    },
+    {
+      "description": "We are experiencing issues with user session timeouts. Users are being logged out too quickly, even while active."
+    },
+    {
+      "description": "I have noticed discrepancies in the usage reports. The numbers do not match our internal tracking data."
+    },
+    {
+      "description": "We need assistance with setting up multi-factor authentication for enhanced security. Can you provide guidance?"
+    }
+  ]
+  
