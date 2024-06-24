@@ -7,7 +7,7 @@ from models.support_ticket import Ticket
 from models.plan import Plan
 from models.product import Product
 from models.plan_product import PlanProduct
-from app import db
+from app import db, bcrypt
 import json, random
 
 db_commands = Blueprint('db', __name__)
@@ -59,6 +59,7 @@ def database_create():
             first_name = i['first_name'],
             last_name = i['last_name'],
             email = i['email'],
+            password = bcrypt.generate_password_hash(i["password"]).decode("utf8"),
             date_created=date.today(),
             last_login=date.today(),
             ))

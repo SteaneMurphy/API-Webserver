@@ -112,287 +112,63 @@ Ensuring that you are within the newly created virtual environment, you can safe
 
 ### ${\textsf{\color{magenta}USERS}}$
 
-#### ${\textsf{\color{red}REGISTER A NEW USER ACCOUNT}}$
-*Create a new user account in the database with the submitted details*
-
-- URI: ```/users/register```
-- HTTPS: ```POST```
-- HEADER: Not Applicable
-- AUTHORISATION: None
-- BODY:
-```json
-{
-    "first_name": "string",
-    "last_name": "string",
-    "phone": "string",
-    "email": "string",
-    "password": "string",
-}
-```
-- SUCCESSFUL RESPONSE: 
-    - ```201 Created```
-
-```json
-{
-    "response": "User registration successful" 
-}
-```
-- FAILED RESPONSE:
-    - ```400 Bad Request```
-
-```json
-{
-    "response": "User registration failed"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}USER ACCOUNT LOGIN}}$
-*Log user into system with supplied credentials. Returns a bearer JWT token*
-
-- URI: ```/users/login```
-- HTTPS: ```POST```
-- HEADER: Not Applicable
-- AUTHORISATION: ${\textsf{\color{red}User Acccount Credentials}}$
-- BODY:
-```json
-{
-    "email": "string",
-    "password": "string",
-}
-```
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-{
-    //example token provided
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-    "repsonse": "User login successful",
-}
-```
-- FAILED RESPONSE:
-    - ```401 Unauthorised```
-
-```json
-{
-    "response": "User login failed"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}UPDATE USER DETAILS}}$
-*User may update account details using submitted details and user ID*
-
-- URI: ```/users/update/<int:id>```
-- HTTPS: ```PUT```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}User}}$
-- BODY:
-```json
-{
-    "first_name": "string",
-    "last_name": "string",
-    "phone": "string",
-    "email": "string",
-    "password": "string",
-}
-```
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-{
-    "response": "User Details Updated Successfully" 
-}
-```
-- FAILED RESPONSE:
-    - ```401 Unauthorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Not Authorised"
-}
-```
-```json
-{
-    "response": "Not Found"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}ACCOUNT DELETION}}$
-*Admin may delete a specific user account via an user ID*
-
-- URI: ```/users/delete/<int:id>```
-- HTTPS: ```GET```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}Admin}}$
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-{
-    "response": "User <int:id> deleted successfully" 
-}
-```
-- FAILED RESPONSE:
-    - ```401 Unauthorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Unauthorised Access"
-}
-```
-```json
-{
-    "response": "User Does Not Exist"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}GET USER DETAILS BY ID}}$
-*Returns user details by submitted ID*
-
-- URI: ```/users/<int:id>```
-- HTTPS: ```GET```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}User}}$
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-{
-    "first_name": "string",
-    "last_name": "string",
-    "phone": "string",
-    "email": "string",
-}
-```
-- FAILED RESPONSE:
-    - ```401 Not Authorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Not Authorised"
-}
-```
-```json
-{
-    "response": "Not Found"
-}
-```
-<br>
-
-#### ${\textsf{\color{red}GET ALL USERS DETAILS}}$
-*Returns user details by submitted ID*
-
-- URI: ```/users```
-- HTTPS: ```GET```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}Admin}}$
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-[
-    {
-        //user 1
-        "user_ID": "integer",
-        "first_name": "string",
-        "last_name": "string",
-        "phone": "string",
-        "email": "string",
-    },
-    {
-        //user 2
-        "user_ID": "integer",
-        "first_name": "string",
-        "last_name": "string",
-        "phone": "string",
-        "email": "string",
-    },
-    ///etc for all users in database
-]
-```
-- FAILED RESPONSE:
-    - ```401 Not Authorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Not Authorised"
-}
-```
-```json
-{
-    "response": "Not Found"
-}
-```
-<br>
+- register a new user account
+- login to existing user account
+- get user account by ID
+- get subscriptions, plans, payments, products, planproducts by user ID (summary)
+- get list of all user accounts
+- update account details
+- update password to account
+- delete user account by ID
 
 ### ${\textsf{\color{magenta}SUBSCRIPTIONS}}$
 
-#### ${\textsf{\color{red}CREATE SUBSCRIPTION}}$
-*Create a new subscription type*
-
-- URI: ```/subscriptions```
-- HTTPS: ```POST```
-- HEADER: ${\textsf{\color{red}JWT Bearer Token}}$
-- AUTHORISATION: ${\textsf{\color{red}Admin}}$
-- SUCCESSFUL RESPONSE: 
-    - ```200 OK```
-
-```json
-[
-    {
-        //user 1
-        "subscription_ID": "integer",
-        "first_name": "string",
-        "last_name": "string",
-        "phone": "string",
-        "email": "string",
-    },
-    {
-        //user 2
-        "user_ID": "integer",
-        "first_name": "string",
-        "last_name": "string",
-        "phone": "string",
-        "email": "string",
-    },
-    ///etc for all users in database
-]
-```
-- FAILED RESPONSE:
-    - ```401 Not Authorised```
-    - ```404 Not Found```
-
-```json
-{
-    "response": "Not Authorised"
-}
-```
-```json
-{
-    "response": "Not Found"
-}
-```
-<br>
-
-- Create Subscription (Admin Only)
-- Update Subscription (Admin Only)
-- Get Subscription By ID
-- Delete Subscription (Admin Only)
-- Get All Subscriptions
+- create new subscription
+- get subscription by subscription ID
+- get list of all subscriptions on user account
+- get list of all subscriptions
+- update subscription
+- delete subscription
 
 ### ${\textsf{\color{magenta}PAYMENTS}}$
 
-### ${\textsf{\color{magenta}PRODUCTS}}$
+- create new payment
+- get payment by payment ID
+- get list of all payments on user account
+- get list of all payments
+- update payment by payment ID
+- delete payment by payment ID
+
+### ${\textsf{\color{magenta}TICKETS}}$
+
+- create new support ticket
+- get support ticket by ticket ID
+- get list of all tickects on user account
+- get list of all tickets
+- update ticket by ID
+- delete ticket by ID
 
 ### ${\textsf{\color{magenta}PLANS}}$
 
-### ${\textsf{\color{magenta}TICKETS}}$
+- create new plan
+- get plan by plan ID
+- get list of all plans
+- update existing plan by ID
+- delete plan by plan ID
+
+### ${\textsf{\color{magenta}PRODUCTS}}$
+
+- create new product
+- get product by product ID
+- get all products
+- update product by ID
+- delete product by ID
+
+### ${\textsf{\color{magenta}PLAN PRODUCTS}}$
+
+- create new plan/product relationship
+- get plan/product relationship by ID
+- get all plan/product relationships
+- get list of all products under each plan type
+- update existing plan/product relationship by ID
+- delete a plan/product relationship
