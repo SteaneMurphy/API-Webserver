@@ -28,6 +28,8 @@ jwt = JWTManager(app)
 
 from blueprints.cli_bp import db_commands
 from blueprints.users_bp import users_bp
+from blueprints.tickets_bp import tickets_bp
 app.register_blueprint(db_commands)
 app.register_blueprint(users_bp)
+app.register_blueprint(tickets_bp)
 

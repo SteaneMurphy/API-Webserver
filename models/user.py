@@ -15,8 +15,8 @@ class User(db.Model):
     date_created: Mapped[date] = date.today()
     last_login: Mapped[date] =  date.today()                               #how to figure out custom date?
 
-    subscriptions: Mapped["Subscription"] = relationship(back_populates='user')
-    tickets: Mapped["Ticket"] = relationship(back_populates='user')
+    subscriptions: Mapped["Subscription"] = relationship(back_populates='user', cascade="all, delete")
+    tickets: Mapped["Ticket"] = relationship(back_populates='user', cascade="all, delete")
 
 class UserSchema(ma.Schema):
     class Meta:

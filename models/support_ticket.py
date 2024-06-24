@@ -12,8 +12,8 @@ class Ticket(db.Model):
     date_created: Mapped[date]
     status: Mapped[str] = mapped_column(String(100), server_default="in progress")
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship(back_populates="tickets")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    user: Mapped["User"] = relationship(back_populates="tickets", cascade="all, delete")
 
 class TicketSchema(ma.Schema):
     user = fields.Nested("UserSchema")
