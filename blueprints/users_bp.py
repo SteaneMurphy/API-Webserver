@@ -1,10 +1,12 @@
 from datetime import timedelta
 from flask import Blueprint, jsonify, abort, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import request
 from flask_jwt_extended import create_access_token
 from app import db, bcrypt
 from models.user import User, UserSchema
 #from models.subscription import Subscription, SubscriptionSchema <- work on this feature later
+from Security.auth import admin_only
 
 
 users_bp = Blueprint("users", __name__, url_prefix='/users')
@@ -49,7 +51,10 @@ def login():
 
 #get user account by user ID, excludes password
 @users_bp.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_user(id):
+    user_id = get_jwt_identity()
+    print(user_id)
     user = db.get_or_404(User, id)
     return UserSchema(exclude=["password"]).dump(user)
 

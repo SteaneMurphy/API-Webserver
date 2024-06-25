@@ -5,6 +5,7 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from marshmallow.exceptions import ValidationError
 
 #allows SQLAlchemy to use its own types
 class Base(DeclarativeBase):
@@ -29,7 +30,40 @@ jwt = JWTManager(app)
 from blueprints.cli_bp import db_commands
 from blueprints.users_bp import users_bp
 from blueprints.tickets_bp import tickets_bp
+from blueprints.payments_bp import payments_bp
+from blueprints.plan_products_bp import plan_products_bp
+from blueprints.plans_bp import plans_bp
+from blueprints.subscriptions_bp import subscriptions_bp
+from blueprints.products_bp import products_bp
 app.register_blueprint(db_commands)
 app.register_blueprint(users_bp)
 app.register_blueprint(tickets_bp)
+app.register_blueprint(payments_bp)
+app.register_blueprint(plan_products_bp)
+app.register_blueprint(plans_bp)
+app.register_blueprint(subscriptions_bp)
+app.register_blueprint(products_bp)
+
+@app.route("/")
+def index():
+    return "Welcome to your SaaS API!"
+
+@app.errorhandler(405)
+@app.errorhandler(404)
+def resource_not_found():
+    return { "error": "Not Found" }
+
+@app.errorhandler(ValidationError)
+def invalid_request(err):
+    return { "error": vars(err)["messages"] }
+
+@app.errorhandler(KeyError)
+def invalid_request(err):
+    return { "error": f"Missing field: {str(err)}" }
+
+@app.errorhandler(TypeError)
+def invalid_request(err):
+    return { "error": f"Type expected: {str(err)}" }
+
+print(app.url_map)
 
