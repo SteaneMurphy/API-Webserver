@@ -17,7 +17,7 @@ class Payment(db.Model):
     
 
 class PaymentSchema(ma.Schema):
-    subscription = fields.Nested("SubscriptionSchema")
+    subscription = fields.Nested("SubscriptionSchema", only=["id"])
 
     class Meta:
         fields = ("id", "amount", "payment_date", "payment_type", "subscription")

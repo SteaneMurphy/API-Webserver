@@ -6,18 +6,22 @@ from models.payment import Payment
 from models.support_ticket import Ticket
 from models.plan import Plan
 from models.product import Product
-from models.plan_product import PlanProduct
+from models.subscription_details import SubscriptionDetail
 from app import db, bcrypt
 import json, random
+from security.auth import generate_license
 
-db_commands = Blueprint('db', __name__)
+cli_commands = Blueprint('cli', __name__)
 
-@db_commands.cli.command("create")
+@cli_commands.cli.command("create")
 def database_create():
+    print("Droppping tables")
     db.drop_all()
+    print("Dropped tables")
+    print("Creating tables")
     db.create_all()
     print("Created tables")
-    
+    print("Seeding tables")
     #four types of plans
     plans = [
         Plan(
@@ -25,24 +29,28 @@ def database_create():
             description="Access to service is free, can use upto 2 products",
             price=0,
             length=1000,
+            product_limit=2
         ),
         Plan(
             plan_name="Basic",
             description="Provides basic access to service, comes with use of 4 products",
             price=15.99,
             length=30,
+            product_limit=4
         ),
         Plan(
             plan_name="Advanced",
             description="Provides advanced access to service, comes with use of 5 products",
             price=29.99,
             length=30,
+            product_limit=5
         ),
         Plan(
             plan_name="Pro",
             description="Provides professional access to service, comes with use of 6 products",
             price=49.99,
             length=30,
+            product_limit=6
         ),
     ]
 
@@ -59,7 +67,8 @@ def database_create():
             first_name = i['first_name'],
             last_name = i['last_name'],
             email = i['email'],
-            password = bcrypt.generate_password_hash(i["password"]).decode("utf8"),
+            #password = bcrypt.generate_password_hash(i["password"]).decode("utf8"),
+            password = "hello",
             date_created=date.today(),
             last_login=date.today(),
             ))
@@ -86,15 +95,16 @@ def database_create():
     #for each entry in subscriptions[], create a payment with the correct price depending that associated subscriptions plan
     payments = []   
     for index, val in enumerate(subscriptions):
-        price = val.plan.price
-        payments.append(
-            Payment(            
-                amount=price,
-                payment_date=date.today(),
-                payment_type=random.choice(["mastercard", "visa", "amex", "paypal", "eft"]),
-                subscription=subscriptions[index],
-            ))
-        db.session.add(payments[index])  #wtf? db.session.add_all() causes session to fail?
+        #price = val.plan.price
+        for j in range(random.randint(1, 10)):
+            payments.append(
+                Payment(            
+                    amount=0,
+                    payment_date=date.today(),
+                    payment_type=random.choice(["mastercard", "visa", "amex", "paypal", "eft"]),
+                    subscription=subscriptions[index],
+                ))
+    db.session.add_all(payments)  #wtf? db.session.add_all() causes session to fail?
     db.session.commit()
 
     #for each user in users[], generate a random amount of support tickets between 0 and 3
@@ -121,87 +131,25 @@ def database_create():
             products.append(Product(
                 product_name = i['product_name'],
                 description = i['description'],
-                license = "generate JWT token",
             ))
 
     db.session.add_all(products)
     db.session.commit()
 
-    #associates each plan with a set of products, 4 dummy plans have been associated with the correct amount of products as per their dummy description
-    plan_products = [
-        #free plan
-        PlanProduct(
-            plan=plans[0],
-            product=products[0]
-        ),
-        PlanProduct(
-            plan=plans[0],
-            product=products[1]
-        ),
-        #basic plan
-        PlanProduct(
-            plan=plans[1],
-            product=products[0]
-        ),
-        PlanProduct(
-            plan=plans[1],
-            product=products[1]
-        ),
-        PlanProduct(
-            plan=plans[1],
-            product=products[2]
-        ),
-        PlanProduct(
-            plan=plans[1],
-            product=products[3]
-        ),
-        #advanced plan
-        PlanProduct(
-            plan=plans[2],
-            product=products[0]
-        ),
-        PlanProduct(
-            plan=plans[2],
-            product=products[1]
-        ),
-        PlanProduct(
-            plan=plans[2],
-            product=products[2]
-        ),
-        PlanProduct(
-            plan=plans[2],
-            product=products[3]
-        ),
-        PlanProduct(
-            plan=plans[2],
-            product=products[4]
-        ),
-        #pro plan
-        PlanProduct(
-            plan=plans[3],
-            product=products[0]
-        ),
-        PlanProduct(
-            plan=plans[3],
-            product=products[1]
-        ),
-        PlanProduct(
-            plan=plans[3],
-            product=products[2]
-        ),
-        PlanProduct(
-            plan=plans[3],
-            product=products[3]
-        ),
-        PlanProduct(
-            plan=plans[3],
-            product=products[4]
-        ),
-        PlanProduct(
-            plan=plans[3],
-            product=products[5]
-        ),
-    ]
+    #associates each subscription with a plan and its associated products
+    subscription_details = []
+    for i in subscriptions:
+        populate_products = i.plan.product_limit
+        for j in range(populate_products):
+            subscription_details.append(SubscriptionDetail(
+                license = generate_license(),
+                plan_id = i.plan.id,
+                product_id = random.choice(products).id,
+                subscription_id = i.id
+            ))
 
-    db.session.add_all(plan_products)
+    print("Seeded tables")
+    db.session.add_all(subscription_details)
     db.session.commit()
+
+#@cli_commands.cli.command("test")

@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, abort, make_response
 from flask import request
 from flask_jwt_extended import create_access_token
 from app import db, bcrypt
+from models.plan import Plan, PlanSchema
+from security.auth import admin_only
 
 plans_bp = Blueprint("plans", __name__, url_prefix='/plans')
 
@@ -24,7 +26,9 @@ def get_all_user_plans(id):
 #get all plans
 @plans_bp.route("/", methods=["GET"])
 def get_all_plans():
-    pass
+    stmt = db.select(Plan)
+    plans = db.session.scalars(stmt).all()
+    return PlanSchema(many=True, unknown="exclude").dump(plans)
 
 #update a plan by ID
 @plans_bp.route("/<int:id>", methods=["PUT", "PATCH"])

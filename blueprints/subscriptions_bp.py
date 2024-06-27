@@ -1,13 +1,27 @@
 from flask import Blueprint
 from flask import request
 from app import db, bcrypt
+from models.subscription import Subscription, SubscriptionSchema
+from security.auth import admin_only, verify_admin
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 subscriptions_bp = Blueprint("subscriptions", __name__, url_prefix='/subscriptions')
 
 #create a new subscription
 @subscriptions_bp.route("/", methods=["POST"])
+@jwt_required()
 def create_subscription():
-    pass
+    input_data = SubscriptionSchema(exclude=["start_date", "end_date"]).load(request.json, unknown="exclude")
+    user = get_jwt_identity()    
+    new_subscription = Subscription(
+        #end_date = 
+        status = input_data["status"],
+        user_id = user,
+        plan_id = input_data["plan"]
+    )
+    db.session.add(new_subscription)
+    db.session.commit()
+    return SubscriptionSchema().dump(new_subscription), 201
 
 #get subscription by ID
 @subscriptions_bp.route("/<int:id>", methods=["GET"])
@@ -21,8 +35,11 @@ def get_all_user_subscriptions(id):
 
 #get all subscriptions
 @subscriptions_bp.route("/", methods=["GET"])
+@admin_only
 def get_all_subscriptions():
-    pass
+    stmt = db.select(Subscription)
+    subscriptions = db.session.scalars(stmt).all()
+    return SubscriptionSchema(many=True, exclude=["plan"], unknown="exclude").dump(subscriptions)
 
 #update a subscription by ID
 @subscriptions_bp.route("/<int:id>", methods=["PUT", "PATCH"])

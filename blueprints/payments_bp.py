@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, abort, make_response
 from flask import request
 from flask_jwt_extended import create_access_token
 from app import db, bcrypt
+from models.payment import Payment, PaymentSchema
+from security.auth import admin_only
 
 payments_bp = Blueprint("payments", __name__, url_prefix='/payments')
 
@@ -24,7 +26,7 @@ def get_all_user_payments(id):
 #get all payments
 @payments_bp.route("/", methods=["GET"])
 def get_all_payments():
-    pass
+    return get_all(Payment, PaymentSchema)
 
 #update a payment by ID
 @payments_bp.route("/<int:id>", methods=["PUT", "PATCH"])

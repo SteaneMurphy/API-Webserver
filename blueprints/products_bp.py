@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, abort, make_response
 from flask import request
 from flask_jwt_extended import create_access_token
 from app import db, bcrypt
+from models.product import Product, ProductSchema
+from security.auth import admin_only
 
 products_bp = Blueprint("products", __name__, url_prefix='/products')
 
@@ -24,7 +26,9 @@ def get_all_user_products(id):
 #get all products
 @products_bp.route("/", methods=["GET"])
 def get_all_products():
-    pass
+    stmt = db.select(Product)
+    products = db.session.scalars(stmt).all()
+    return ProductSchema(many=True, unknown="exclude").dump(products)
 
 #update a product by ID
 @products_bp.route("/<int:id>", methods=["PUT", "PATCH"])

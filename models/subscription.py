@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Boolean, ForeignKey
 from marshmallow import fields
 
+
 class Subscription(db.Model):
     __tablename__ = "subscriptions"
 
@@ -18,10 +19,11 @@ class Subscription(db.Model):
     plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"))
     plan: Mapped["Plan"] = relationship(back_populates="subscriptions")
 
-    payment: Mapped["Payment"] = relationship(back_populates='subscription', cascade="all, delete")
+    payment: Mapped["Payment"] = relationship(back_populates="subscription", cascade="all, delete")
+    subscription_detail: Mapped["SubscriptionDetail"] = relationship(back_populates="subscription", cascade="all, delete")
 
 class SubscriptionSchema(ma.Schema):
-    user = fields.Nested("UserSchema")
+    user = fields.Nested("UserSchema", only=["id"])
     plan = fields.Nested("PlanSchema")
 
     class Meta:
