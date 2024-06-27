@@ -13,14 +13,15 @@ def admin_only(fn):
         if user:
             return fn()
         else:
-            return {"error": "You must be an admin"}, 403
+            return {"error": "Unauthorised: Admin Only"}, 403
     return inner
 
+@jwt_required()
 def verify_admin():
     user_id = get_jwt_identity()
-    stmt = db.select(User).where(User.id == user_id)
+    stmt = db.select(User).where(User.id == user_id, User.admin)
     user = db.session.scalar(stmt)
-    if user.admin:
+    if user:
         return True
     else:
         return {"error": "You must be an admin"}, 403
@@ -30,7 +31,7 @@ def verify_admin():
 def account_owner(id):
     user_id = get_jwt_identity()
     if user_id != id:
-        abort(make_response(jsonify(error="You must be the account owner to access this resource"), 403))
+        abort(make_response(jsonify(error="Unauthorised"), 403))
     else:
         return True
     

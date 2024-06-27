@@ -4,7 +4,7 @@ from flask import request
 from flask_jwt_extended import create_access_token
 from app import db, bcrypt
 from models.support_ticket import Ticket, TicketSchema
-from security.auth import admin_only
+from security.auth import admin_only, account_owner
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 tickets_bp = Blueprint("tickets", __name__, url_prefix='/tickets')
@@ -32,8 +32,12 @@ def get_ticket(id):
 
 #get all user tickets by user ID
 @tickets_bp.route("/user/<int:id>", methods=["GET"])
-def get_user_tickets():
-    pass
+@jwt_required()
+def get_user_tickets(id):
+    user = get_jwt_identity()
+    stmt = db.select(Ticket).where(Ticket.user_id == id, user == id)
+    tickets = db.session.scalars(stmt).all()
+    return TicketSchema(many=True).dump(tickets)
 
 #get all tickets
 @tickets_bp.route("/", methods=["GET"])

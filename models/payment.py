@@ -9,10 +9,10 @@ class Payment(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     amount: Mapped[float] = mapped_column(Float())
-    payment_date: Mapped[date]
+    payment_date: Mapped[date] = date.today()
     payment_type: Mapped[str] = mapped_column(String(100))                              #mastercard, visa, paypal, etc
 
-    subscription_id: Mapped[int] = mapped_column(ForeignKey("subscriptions.id", ondelete="CASCADE"))
+    subscription_id: Mapped[int] = mapped_column(ForeignKey("subscriptions.id"))
     subscription: Mapped["Subscription"] = relationship(back_populates='payment', cascade="all, delete")
     
 

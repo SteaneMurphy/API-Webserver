@@ -11,8 +11,8 @@ class Product(db.Model):
     product_name: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(Text())
 
-    subscription_detail: Mapped["SubscriptionDetail"] = relationship(back_populates='product')
+    subscription_detail: Mapped["SubscriptionDetail"] = relationship(back_populates='product', cascade="all, delete")
 
 class ProductSchema(ma.Schema):
     class Meta:
-        fields = ("id", "product_name", "description")
+        fields = ("id", "product_name", "description", "subscription_detail")

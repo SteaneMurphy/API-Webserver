@@ -95,11 +95,11 @@ def database_create():
     #for each entry in subscriptions[], create a payment with the correct price depending that associated subscriptions plan
     payments = []   
     for index, val in enumerate(subscriptions):
-        #price = val.plan.price
+        #print((plans[(subscriptions[index].plan_id) - 1]).price)
         for j in range(random.randint(1, 10)):
             payments.append(
                 Payment(            
-                    amount=0,
+                    amount=(plans[(subscriptions[index].plan_id) - 1]).price,
                     payment_date=date.today(),
                     payment_type=random.choice(["mastercard", "visa", "amex", "paypal", "eft"]),
                     subscription=subscriptions[index],

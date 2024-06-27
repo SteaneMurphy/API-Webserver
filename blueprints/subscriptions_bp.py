@@ -14,10 +14,9 @@ def create_subscription():
     input_data = SubscriptionSchema(exclude=["start_date", "end_date"]).load(request.json, unknown="exclude")
     user = get_jwt_identity()    
     new_subscription = Subscription(
-        #end_date = 
         status = input_data["status"],
         user_id = user,
-        plan_id = input_data["plan"]
+        plan_id = input_data["plan_id"]
     )
     db.session.add(new_subscription)
     db.session.commit()
@@ -50,3 +49,11 @@ def update_subscription(id):
 @subscriptions_bp.route("/<int:id>", methods=["DELETE"])
 def delete_subscription():
     pass
+
+# #returns a summary of linked tables by user ID, useful when looking up a user account
+# @users_bp.route("/<int:id>/summary", methods=["GET"])
+# def user_summary(id):
+#     user = db.get_or_404(User, id)
+#     subscriptons = db.select(Subscription).where(Subscription.user_id == user.id)
+#     final = db.session.scalars(subscriptons).all()
+#     return SubscriptionSchema(many=True, exclude=["user"]).dump(final)
