@@ -14,8 +14,8 @@ class Plan(db.Model):
     length: Mapped[int] = mapped_column(Integer())
     product_limit: Mapped[int] = mapped_column(Integer())                                     
 
-    subscriptions: Mapped["Subscription"] = relationship(back_populates='plan')
-    subscription_detail: Mapped["SubscriptionDetail"] = relationship(back_populates='plan')
+    subscriptions: Mapped["Subscription"] = relationship(back_populates='plan', cascade="all, delete")
+    subscription_details: Mapped["SubscriptionDetail"] = relationship(back_populates='plan')
 
 class PlanSchema(ma.Schema):
     class Meta:

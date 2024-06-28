@@ -3,6 +3,7 @@ from app import db, ma
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Boolean, ForeignKey
 from marshmallow import fields
+from typing import List
 
 
 class Subscription(db.Model):
@@ -17,14 +18,14 @@ class Subscription(db.Model):
     user: Mapped["User"] = relationship(back_populates="subscriptions", cascade="all, delete")
 
     plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id", ondelete="CASCADE"))
-    plan: Mapped["Plan"] = relationship(back_populates="subscriptions")
+    plan: Mapped["Plan"] = relationship(back_populates="subscriptions", cascade="all, delete")
 
     payment: Mapped["Payment"] = relationship(back_populates="subscription", cascade="all, delete")
-    subscription_detail: Mapped["SubscriptionDetail"] = relationship(back_populates="subscription", cascade="all, delete")
+    subscription_details: Mapped[List["SubscriptionDetail"]] = relationship(back_populates="subscription", cascade="all, delete")
 
 class SubscriptionSchema(ma.Schema):
     user = fields.Nested("UserSchema", only=["id"])
-    plan = fields.Nested("PlanSchema")
+    plan = fields.Nested("PlanSchema", only=["id"])
 
     class Meta:
-        fields = ("id", "start_date", "end_date", "status", "user", "plan", "subscription_detail")
+        fields = ("id", "start_date", "end_date", "status", "user", "plan")

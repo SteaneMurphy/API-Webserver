@@ -12,8 +12,8 @@ class Payment(db.Model):
     payment_date: Mapped[date] = date.today()
     payment_type: Mapped[str] = mapped_column(String(100))                              #mastercard, visa, paypal, etc
 
-    subscription_id: Mapped[int] = mapped_column(ForeignKey("subscriptions.id"))
-    subscription: Mapped["Subscription"] = relationship(back_populates='payment', cascade="all, delete")
+    subscription_id: Mapped[int] = mapped_column(ForeignKey("subscriptions.id", ondelete="CASCADE"))
+    subscription: Mapped["Subscription"] = relationship(back_populates='payment')
     
 
 class PaymentSchema(ma.Schema):

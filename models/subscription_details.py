@@ -12,13 +12,13 @@ class SubscriptionDetail(db.Model):
     license: Mapped[str] = mapped_column(String(100))                                   
 
     plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id", ondelete="CASCADE"))
-    plan: Mapped["Plan"] = relationship(back_populates="subscription_detail", cascade="all, delete") 
+    plan: Mapped["Plan"] = relationship(back_populates="subscription_details", cascade="all, delete") 
 
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"))
-    product: Mapped["Product"] = relationship(back_populates="subscription_detail", cascade="all, delete")
+    product: Mapped["Product"] = relationship(back_populates="subscription_details", cascade="all, delete")
 
     subscription_id: Mapped[int] = mapped_column(ForeignKey("subscriptions.id", ondelete="CASCADE"))
-    subscription: Mapped["Subscription"] = relationship(back_populates="subscription_detail", cascade="all, delete") 
+    subscription: Mapped["Subscription"] = relationship(back_populates="subscription_details", cascade="all, delete") 
 
 class SubscriptionDetailSchema(ma.Schema):
     plan = fields.Nested("PlanSchema")
