@@ -104,7 +104,7 @@ Ensuring that you are within the newly created virtual environment, you can safe
 
 ## ${\textsf{\color{goldenrod}ERD (ENTITY RELATIONSHIP DIAGRAM)}}$
 
-![image](/docs/ERD2.png)
+![image](/docs/ERD.png)
 
 ## ${\textsf{\color{goldenrod}ENTITY MODELS AND RELATIONSHIPS}}$
 
