@@ -50,8 +50,9 @@ def index():
 
 @app.errorhandler(405)
 @app.errorhandler(404)
-def resource_not_found():
-    return { "error": "Not Found" }
+@app.errorhandler(401)
+def resource_not_found(self):
+    return { "error": "Resource not found" }
 
 @app.errorhandler(ValidationError)
 def invalid_request(err):

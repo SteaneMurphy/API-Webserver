@@ -72,6 +72,15 @@ def database_create():
             date_created=date.today(),
             last_login=date.today(),
             ))
+        users.append(User(
+            first_name = 'admin1',
+            last_name = 'admin',
+            email = 'admin_email_1',
+            password = bcrypt.generate_password_hash('testpassword123').decode("utf8"),
+            admin = True,
+            date_created=date.today(),
+            last_login=date.today(),
+        ))
 
     db.session.add_all(users)
     db.session.commit()
@@ -143,7 +152,6 @@ def database_create():
         for j in range(populate_products):
             subscription_details.append(SubscriptionDetail(
                 license = generate_license(),
-                plan_id = i.plan.id,
                 product_id = random.choice(products).id,
                 subscription_id = i.id
             ))

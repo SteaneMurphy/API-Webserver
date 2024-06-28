@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import request
 from app import db, bcrypt
 from models.subscription import Subscription, SubscriptionSchema
-from security.auth import admin_only, verify_admin
+from security.auth import admin_only
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 subscriptions_bp = Blueprint("subscriptions", __name__, url_prefix='/subscriptions')
@@ -22,11 +22,15 @@ def create_subscription():
     db.session.commit()
     return SubscriptionSchema().dump(new_subscription), 201
 
+
+
 #get subscription by ID
 @subscriptions_bp.route("/<int:id>", methods=["GET"])
 def get_subscription(id):
     subscription = db.get_or_404(Subscription, id)
     return SubscriptionSchema().dump(subscription)
+
+
 
 #get all subscriptions by user ID
 @subscriptions_bp.route("/user/<int:id>", methods=["GET"])
@@ -35,12 +39,16 @@ def get_all_user_subscriptions(id):
     subscriptions = db.session.scalars(stmt).all()
     return SubscriptionSchema(many=True).dump(subscriptions)
 
+
+
 #get all subscriptions
 @subscriptions_bp.route("/", methods=["GET"])
 def get_all_subscriptions():
     stmt = db.select(Subscription)
     subscriptions = db.session.scalars(stmt).all()
     return SubscriptionSchema(many=True, exclude=["plan"], unknown="exclude").dump(subscriptions)
+
+
 
 #update a subscription by ID - might need to update plan?
 @subscriptions_bp.route("/<int:id>", methods=["PUT", "PATCH"])
@@ -51,6 +59,8 @@ def update_subscription(id):
     db.session.commit()
     return SubscriptionSchema().dump(subscription)
 
+
+
 # #delete a subscription by ID - cant delete due to association table, must delete there
 # @subscriptions_bp.route("/<int:id>", methods=["DELETE"])
 # def delete_subscription(id):
@@ -58,6 +68,8 @@ def update_subscription(id):
 #     db.session.delete(subscription)
 #     db.session.commit()
 #     return {}
+
+
 
 # #returns a summary of linked tables by user ID, useful when looking up a user account
 # @users_bp.route("/<int:id>/summary", methods=["GET"])
