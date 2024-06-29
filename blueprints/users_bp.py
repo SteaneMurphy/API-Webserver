@@ -106,7 +106,7 @@ def update_admin(id):
 
 #updates the name and email of an existing user account (id: USER ID)
 @users_bp.route("/<int:id>", methods=["PUT", "PATCH"])
-@admin_or_owner
+@admin_or_owner("user")
 def update_user(id):
     #gets the user object if there is a match with the supplied user id from the header
     user = db.get_or_404(User, id)
@@ -123,7 +123,7 @@ def update_user(id):
 
 #updates the password for an existing user account (id: USER ID)
 @users_bp.route("/credentials/<int:id>", methods=["PUT", "PATCH"])
-@admin_or_owner
+@admin_or_owner("user")
 def change_user_password(id):
     #gets the user object if there is a match with the supplied user id from the header
     user = db.get_or_404(User, id)

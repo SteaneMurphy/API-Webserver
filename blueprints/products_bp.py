@@ -35,15 +35,6 @@ def get_product(id):
 
 
 
-# #get all products by user ID - better suited for subscriptiondetails
-# @products_bp.route("/user/<int:id>", methods=["GET"])
-# def get_all_user_products(id):
-#     stmt = db.select(Product).where(Ticket.user_id == id, user == id)
-#     products = db.session.scalars(stmt).all()
-#     return ProductSchema(many=True).dump(products)
-
-
-
 #get all products in the database
 @products_bp.route("/", methods=["GET"])
 @jwt_required()

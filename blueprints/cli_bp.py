@@ -67,8 +67,7 @@ def database_create():
             first_name = i['first_name'],
             last_name = i['last_name'],
             email = i['email'],
-            #password = bcrypt.generate_password_hash(i["password"]).decode("utf8"),
-            password = "hello",
+            password = bcrypt.generate_password_hash(i["password"]).decode("utf8"),
             date_created=date.today(),
             last_login=date.today(),
             ))
@@ -104,16 +103,15 @@ def database_create():
     #for each entry in subscriptions[], create a payment with the correct price depending that associated subscriptions plan
     payments = []   
     for index, val in enumerate(subscriptions):
-        #print((plans[(subscriptions[index].plan_id) - 1]).price)
         for j in range(random.randint(1, 10)):
             payments.append(
                 Payment(            
-                    amount=(plans[(subscriptions[index].plan_id) - 1]).price,
+                    amount=plans[val.plan_id - 1].price,
                     payment_date=date.today(),
                     payment_type=random.choice(["mastercard", "visa", "amex", "paypal", "eft"]),
                     subscription=subscriptions[index],
                 ))
-    db.session.add_all(payments)  #wtf? db.session.add_all() causes session to fail?
+        db.session.add_all(payments)
     db.session.commit()
 
     #for each user in users[], generate a random amount of support tickets between 0 and 3

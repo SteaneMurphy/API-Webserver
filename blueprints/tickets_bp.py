@@ -27,10 +27,10 @@ def create_ticket():
     return TicketSchema().dump(new_ticket), 201
 
 
-#FIX BUGGED
+
 #return a support ticket by ticket ID (id: TICKET ID)
 @tickets_bp.route("/<int:id>", methods=["GET"])
-@admin_or_owner
+@admin_or_owner("ticket")
 def get_ticket(id):
     #query database to find a ticket ID that matches ID sent in the header, otherwise return 404
     ticket = db.get_or_404(Ticket, id)
@@ -40,7 +40,7 @@ def get_ticket(id):
 
 #get all tickets linked to a user ID (id: USER ID)
 @tickets_bp.route("/user/<int:id>", methods=["GET"])
-@admin_or_owner
+@admin_or_owner("user")
 def get_user_tickets(id):
     #returns all ticket entries from the 'tickets' database table that also have the supplied user ID foreign key
     #STATEMENT: SELECT tickets.id, tickets.issue_description, tickets.status, tickets.user_id 
@@ -62,10 +62,10 @@ def get_all_tickets():
     return TicketSchema(many=True, unknown="exclude").dump(tickets)
 
 
-#FIX BUGGED
+
 #update a support ticket by ticket ID (id: TICKET ID)
 @tickets_bp.route("/<int:id>", methods=["PUT", "PATCH"])
-@admin_or_owner
+@admin_or_owner("ticket")
 def update_ticket(id):
     #query database to find a ticket ID that matches ID sent in the header, otherwise return 404
     ticket = db.get_or_404(Ticket, id)

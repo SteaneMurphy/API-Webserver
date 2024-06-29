@@ -18,7 +18,7 @@ class Subscription(db.Model):
     plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"))
     
     #ORM Relationships
-    user: Mapped["User"] = relationship(back_populates="subscriptions", cascade="all, delete")
+    user: Mapped["User"] = relationship(back_populates="subscriptions")
     plan: Mapped["Plan"] = relationship(back_populates="subscriptions")
     payment: Mapped["Payment"] = relationship(back_populates="subscription", cascade="all, delete")
     subscription_details: Mapped[List["SubscriptionDetail"]] = relationship(back_populates="subscription", cascade="all, delete")
@@ -26,7 +26,7 @@ class Subscription(db.Model):
 #Marshmallow Schema
 class SubscriptionSchema(ma.Schema):
     user = fields.Nested("UserSchema", only=["id"])
-    plan = fields.Nested("PlanSchema", only=["id"])
+    plan = fields.Nested("PlanSchema")
 
     class Meta:
-        fields = ("id", "start_date", "end_date", "status", "user", "plan")
+        fields = ("id", "start_date", "end_date", "status", "user", "plan", "plan_id", "products")

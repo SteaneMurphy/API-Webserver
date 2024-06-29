@@ -46,20 +46,20 @@ def check_payment_type(price, payment_type):
         return payment_type
 
 
-#FIX BUGGED
+
 #returns a payment by payment ID (id: PAYMENT ID)
 @payments_bp.route("/<int:id>", methods=["GET"])
-@admin_or_owner
+@admin_or_owner("payment")
 def get_payment(id):
     #query database to find a payment ID that matches ID sent in the header, otherwise return 404
     payment = db.get_or_404(Payment, id)
     return PaymentSchema().dump(payment)
 
 
-#FIX BUGGED
+
 #returns all payments by user ID (id: USER ID)
 @payments_bp.route("/user/<int:id>", methods=["GET"])
-#@admin_or_owner
+@admin_or_owner("user")
 def get_all_user_payments(id):
     #this query joins entries from the payments table with entries from the subscription table that match the user ID (id: USER ID)
     #STATEMENT: SELECT payments.id, payments.amount, payments.payment_type, payments.subscription_id FROM payments 

@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from marshmallow import fields
 from typing import List
-from security.auth import generate_license
 
 #USER ENTITY MODEL
 class SubscriptionDetail(db.Model):

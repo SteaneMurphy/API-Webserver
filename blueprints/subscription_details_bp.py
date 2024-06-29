@@ -1,60 +1,54 @@
 from flask import Blueprint
-from flask import request
-from app import db, bcrypt
+from app import db
 from models.subscription_details import SubscriptionDetail, SubscriptionDetailSchema
-from security.auth import admin_only
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from security.auth import admin_only, admin_or_owner
 
+#blueprint URI
 subscription_details_bp = Blueprint("subscription_details", __name__, url_prefix='/subscription-details')
 
-# #create a new subscription_detail
-# @subscription_details_bp.route("/", methods=["POST"])
-# def create_product():
-#     input_data = SubscriptionDetailSchema().load(request.json, unknown="exclude")
-#     new_subscription_detail = SubscriptionDetail(
-#         license = generate_license(),
-#         plan_id=,
-#         product_id=,
-#         subscription_id=
-#     )
-#     db.session.add(new_subscription_detail)
-#     db.session.commit()
-#     return SubscriptionDetailSchema().dump(new_subscription_detail), 201
+#creation of new subscription_detail entries are tied to the creation of a new subscription and are handled by the 'create new subscription' endpoint,
+#as this is just an association table
 
-#get subscription by ID
+#deletion of subscription_detail entries are tied to the deletion of a subscription entry. When a subscription is deleted, all associated subscription_details are
+#deleted by cascade. There is no reason to delete this entity whilst its associated subscription is still active
+
+
+#BUGGED
+#get subscription_detail by ID (id: SUBSCRIPTION_DETAIL ID)
 @subscription_details_bp.route("/<int:id>", methods=["GET"])
+@admin_or_owner("subscription_detail")
 def get_subscription_detail(id):
-    subscription = db.get_or_404(SubscriptionDetail, id)
+    #query database to find a subscription_detail ID that matches ID sent in the header, otherwise return 404 (get_or_404 method was bugged and not working??)
+    subscription = db.session.query(SubscriptionDetail).get(id)
+    if subscription is None:
+        return{"error": "resource not found"}, 404
+    
     return SubscriptionDetailSchema().dump(subscription)
 
-#get subscription details by Subscription ID
+
+
+#get subscription details by Subscription ID (id: SUBSCRIPTION ID)
 @subscription_details_bp.route("/subscription/<int:id>", methods=["GET"])
+@admin_or_owner("subscription")
 def get_user_tickets(id):
+    #query returns SubscriptionDetail object with all fields where it also contains the subscription ID sent in the header
+    #STATEMENT: SELECT subscription_details.id, subscription_details.license, subscription_details.product_id, subscription_details.subscription_id 
+    #           FROM subscription_details WHERE subscription_details.subscription_id = <request:id>
     stmt = db.select(SubscriptionDetail).where(SubscriptionDetail.subscription_id == id)
     details = db.session.scalars(stmt).all()
+    print(stmt)
     return SubscriptionDetailSchema(many=True).dump(details)
 
-#get all subscripton details
+
+
+#get all subscription details in database
 @subscription_details_bp.route("/", methods=["GET"])
+@admin_only
 def get_all_tickets():
+    #query returns all subscription_detail entries in the database
+    #STATEMENT: SELECT subscription_details.id, subscription_details.license, subscription_details.product_id, subscription_details.subscription_id 
+    #           FROM subscription_details
     stmt = db.select(SubscriptionDetail)
     details = db.session.scalars(stmt).all()
+    print(stmt)
     return SubscriptionDetailSchema(many=True, unknown="exclude").dump(details)
-
-# #update a support ticket by ID  - complex
-# @tickets_bp.route("/<int:id>", methods=["PUT", "PATCH"])
-# def update_ticket(id):
-#     ticket = db.get_or_404(Ticket, id)
-#     input_data = TicketSchema(unknown="exclude").load(request.json)
-#     ticket.issue_description = input_data.get("issue_description", ticket.issue_description)
-#     ticket.status = input_data.get("status", ticket.status)
-#     db.session.commit()
-#     return TicketSchema().dump(ticket)
-
-#delete a subscription details by ID        - is deleting plans and products, need to fix
-@subscription_details_bp.route("/<int:id>", methods=["DELETE"])
-def delete_ticket(id):
-    details = db.get_or_404(SubscriptionDetail, id)
-    db.session.delete(details)
-    db.session.commit()
-    return {}

@@ -41,7 +41,7 @@ def get_plan(id):
 
 #get all plans by user ID (id: USER ID)
 @plans_bp.route("/user/<int:id>", methods=["GET"])
-@admin_or_owner
+@admin_or_owner("plan")
 def get_all_user_plans(id):
     #this query joins a new table of Plan and Subscription fields for every plan listed by user id supplied in the header
     #for every plan linked to a subscription that is linked to the associated user id
