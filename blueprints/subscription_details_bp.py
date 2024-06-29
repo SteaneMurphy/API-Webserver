@@ -13,7 +13,7 @@ subscription_details_bp = Blueprint("subscription_details", __name__, url_prefix
 #deleted by cascade. There is no reason to delete this entity whilst its associated subscription is still active
 
 
-#BUGGED
+
 #get subscription_detail by ID (id: SUBSCRIPTION_DETAIL ID)
 @subscription_details_bp.route("/<int:id>", methods=["GET"])
 @admin_or_owner("subscription_detail")

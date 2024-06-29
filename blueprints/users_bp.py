@@ -64,6 +64,7 @@ def login():
 
 #get user account details by user ID (id: USER ID)
 @users_bp.route("/<int:id>", methods=["GET"])
+@admin_or_owner("user")
 def get_user(id):
     #query database to find a user ID that matches ID sent in the header, otherwise return 404
     user = db.get_or_404(User, id)
@@ -100,7 +101,7 @@ def update_admin(id):
     user.admin = input_data.get("admin", user.admin)
     
     db.session.commit()
-    return UserSchema(exclude=["password", "admin"]).dump(user)
+    return { "success": "account admin privileges updated" }
 
 
 

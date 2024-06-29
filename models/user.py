@@ -2,6 +2,8 @@ from datetime import date
 from app import db, ma
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Boolean
+from marshmallow import fields
+from marshmallow.validate import Length
 
 #USER ENTITY MODEL
 class User(db.Model):
@@ -23,5 +25,7 @@ class User(db.Model):
 
 #Marshmallow Schema
 class UserSchema(ma.Schema):
+    password = fields.String(validate=Length(min=4, error='Password must be at least 8 characters long'), required=True)
+
     class Meta:
         fields = ("id", "first_name", "last_name", "email", "password", "admin", "date_created", "last_login")

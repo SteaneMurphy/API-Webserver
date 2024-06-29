@@ -27,6 +27,7 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
+#blueprint registration area
 from blueprints.cli_bp import cli_commands
 from blueprints.users_bp import users_bp
 from blueprints.tickets_bp import tickets_bp
@@ -44,15 +45,29 @@ app.register_blueprint(plans_bp)
 app.register_blueprint(subscriptions_bp)
 app.register_blueprint(products_bp)
 
+#home route
 @app.route("/")
 def index():
     return "Welcome to your SaaS API!"
 
+#various error handling for HTTPS error codes
 @app.errorhandler(405)
 @app.errorhandler(404)
-@app.errorhandler(401)
 def resource_not_found(self):
-    return { "error": "Resource not found" }
+    return { "error": "Resource not found" }, 404
+
+@app.errorhandler(400)
+def bad_request(self):
+    return { "error": "bad request: body missing information" }, 400
+
+@app.errorhandler(403)
+@app.errorhandler(401)
+def unauthorised():
+    return { "error": "not authorised to access this resource" }, 401
+
+@app.errorhandler(ValueError)
+def invalid_request(err):
+    return { "error": "field missing information" }, 500
 
 @app.errorhandler(ValidationError)
 def invalid_request(err):
@@ -60,7 +75,7 @@ def invalid_request(err):
 
 @app.errorhandler(KeyError)
 def invalid_request(err):
-    return { "error": f"Missing field: {str(err)}" }
+    return { "error": f"Missing field: {str(err)}" }, 400
 
 @app.errorhandler(TypeError)
 def invalid_request(err):

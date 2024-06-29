@@ -73,7 +73,7 @@ def create_subscription():
 
     db.session.add_all(sub_details)
     db.session.commit()
-    return SubscriptionSchema().dump(new_subscription), 201
+    return SubscriptionSchema(exclude=["user"]).dump(new_subscription), 201
 
 
 
@@ -124,7 +124,7 @@ def update_subscription(id):
     subscription.status = input_data.get("status", subscription.status)
     
     db.session.commit()
-    return SubscriptionSchema().dump(subscription)
+    return SubscriptionSchema(only=["id", "status", "user"]).dump(subscription)
 
 
 
