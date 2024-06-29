@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text, ForeignKey, Boolean
 from marshmallow import fields
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class Ticket(db.Model):
     __tablename__ = "tickets"
 

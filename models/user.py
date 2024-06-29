@@ -5,7 +5,7 @@ from sqlalchemy import String, Boolean
 from marshmallow import fields
 from marshmallow.validate import Length
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class User(db.Model):
     __tablename__ = "users"
 

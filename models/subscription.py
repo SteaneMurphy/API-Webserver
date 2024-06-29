@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, ForeignKey
 from marshmallow import fields
 from typing import List
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class Subscription(db.Model):
     __tablename__ = "subscriptions"
 

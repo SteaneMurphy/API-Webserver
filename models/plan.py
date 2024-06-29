@@ -1,10 +1,8 @@
 from app import db, ma
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text, Float, Integer
-from typing import List
-from marshmallow import fields
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class Plan(db.Model):
     __tablename__ = "plans"
 

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Float, ForeignKey
 from marshmallow import fields
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class Payment(db.Model):
     __tablename__ = "payments"
 

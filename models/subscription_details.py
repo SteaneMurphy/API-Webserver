@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey, String
 from marshmallow import fields
 from typing import List
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class SubscriptionDetail(db.Model):
     __tablename__ = "subscription_details"
 

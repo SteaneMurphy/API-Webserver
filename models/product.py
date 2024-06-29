@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text
 from typing import List
 
-#USER ENTITY MODEL
+#ENTITY MODEL
 class Product(db.Model):
     __tablename__ = "products"
 
