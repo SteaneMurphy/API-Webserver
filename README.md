@@ -251,7 +251,7 @@ Before and during development of the API, multiple relationships were identified
 
 - Product/Subscription_Details: a one-to-one/many relationship. As explained above, this is the other half of a many-to-many relationship between the subscription and product tables. Please see above for relationship and database query explanations.
 
-![image](/docs/UserSubscription3.png)
+![image](/docs/SubscriptionDetails3.png)
 
 ## ${\textsf{\color{goldenrod}API ENDPOINTS}}$
 
